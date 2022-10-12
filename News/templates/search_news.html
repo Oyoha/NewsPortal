@@ -1,0 +1,49 @@
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{%block title%}
+News
+{%endblock title%}
+
+{%block content%}
+<h1>Все статьи</h1>
+<h3>Всего новостей: {{news|length}}</h3>
+
+<form method="GET">
+    {{ filter.form}}
+    <input type="submit" value="Найти">
+</form>
+
+    <table>
+        <tr>
+            <td>
+                Заголовок
+            </td>
+
+            <td>
+                Дата публикации
+            </td>
+
+            <td>
+                Текст
+            </td>
+        </tr>
+        {% for new in filter.qs %}
+        <tr>
+            <td>
+                {{new.article|censor}}
+            </td>
+
+            <td>
+                {{new.public_time|date:'d M Y'}}
+            </td>
+
+            <td>
+                {{new.text|truncatewords:20|censor}}
+            </td>
+        </tr>
+        {% endfor%}
+    </table>
+
+{%endblock content%}

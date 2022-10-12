@@ -1,0 +1,41 @@
+{% extends 'default.html' %}
+
+{% load custom_filters%}
+
+{%block title%}
+Posts
+{%endblock title%}
+
+{%block content%}
+<table>
+        <tr>
+            <td>
+                Заголовок
+            </td>
+
+            <td>
+                Дата публикации
+            </td>
+
+            <td>
+                Текст
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{new.article|censor}}
+            </td>
+
+            <td>
+                {{new.public_time|date:"d-M-Y G:i"}}
+            </td>
+
+            <td>
+                {{new.text|censor}}
+            </td>
+        </tr>
+</table>
+{% if is_not_authors %}
+<button> <a href="{% url 'upgrade' %}"> Хочу стать автором!</a> </button>
+{% endif %}
+{%endblock content%}
