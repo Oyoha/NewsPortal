@@ -79,6 +79,11 @@ class Comment(models.Model):
         self.save()
 
 
+class Subscriber(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
 class BasicSignupForm(SignupForm):
 
     def save(self, request):
@@ -86,3 +91,5 @@ class BasicSignupForm(SignupForm):
         basic_group = Group.objects.get(name='common')
         basic_group.user_set.add(user)
         return user
+
+
