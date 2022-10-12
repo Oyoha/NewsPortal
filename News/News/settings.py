@@ -148,3 +148,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_FORMS = {'signup': 'portal.models.BasicSignupForm'}
+
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'vasal3000'
+EMAIL_HOST_PASSWORD = '32167456android'
+EMAIL_USE_SSL = True
