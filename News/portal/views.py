@@ -31,6 +31,10 @@ class NewDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        pk = self.kwargs.get('pk')
+        context['is_not_subscriber'] = not Category.objects.filter(subscriber__Category=pk,
+                                                                   subscriber__user=self.request.user.id).exists()
+
         return context
 
 
@@ -77,4 +81,13 @@ def upgrade_me(request):
     premium_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors'):
         premium_group.user_set.add(user)
+    return redirect('/news/')
+
+
+@login_required
+def check_subscribe(request, category_id):
+    user = User.objects.get(pk=request.user.id)
+    category = Category.objects.get(pk=category_id)
+    if user not in category:
+        category.subscriber.add(user)
     return redirect('/news/')

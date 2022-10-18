@@ -39,4 +39,10 @@ Posts
 <h3>Хотите стать автором? Нажимайте на кнопку.</h3>
 <button> <a href="{% url 'upgrade' %}"> Хочу стать автором!</a> </button>
 {% endif %}
+
+{% if is_not_subscriber and request.GET.category.id %}
+<h3>Подпишитесь на рассылку постов данной категории на ваш e-mail.</h3>
+<button><a href="{% url 'subscriber' %}">Подписаться на рассылку!</a></button>
+{% endif %}
+
 {%endblock content%}
