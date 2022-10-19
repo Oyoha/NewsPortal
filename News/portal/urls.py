@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:pk>/edit', NewUpdate.as_view(), name='new_update'),
     path('<int:pk>/delete', NewDelete.as_view(), name='new_delete'),
     path('upgrade/', upgrade_me, name='upgrade'),
-    path('subscribe/<int:i>', check_subscribe, name='subscriber'),
+    path('subscribe/<int:pk>', check_subscribe, name='subscribe'),
+    path('unsubscribe/<int:pk>', check_subscribe, name='unsubscribe')
 ]

@@ -40,9 +40,14 @@ Posts
 <button> <a href="{% url 'upgrade' %}"> Хочу стать автором!</a> </button>
 {% endif %}
 
-{% if is_not_subscriber and request.GET.category.id %}
-<h3>Подпишитесь на рассылку постов данной категории на ваш e-mail.</h3>
-<button><a href="{% url 'subscriber' %}">Подписаться на рассылку!</a></button>
+{% if user_auth %}
+    {% if current_user not in post.category.user.all %}
+    <h3>Подпишитесь на рассылку постов данной категории на ваш e-mail.</h3>
+    <button><a href="{% url 'subscribe' new.pk %}">Подписаться</a></button>
+    {% else %}
+    <h3>Вы можете отписаться от рассылки постов данной категории на ваш e-mail.</h3>
+    <button><a href="{% url 'unsubscribe' new.pk %}">Отписаться</a></button>
+    {% endif %}
 {% endif %}
 
 {%endblock content%}
