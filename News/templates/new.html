@@ -41,7 +41,7 @@ Posts
 {% endif %}
 
 {% if user_auth %}
-    {% if current_user not in post.category.user.all %}
+    {% if is_subscriber %}
     <h3>Подпишитесь на рассылку постов данной категории на ваш e-mail.</h3>
     <button><a href="{% url 'subscribe' new.pk %}">Подписаться</a></button>
     {% else %}

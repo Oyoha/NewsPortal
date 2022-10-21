@@ -32,7 +32,11 @@ class NewDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
         context['user_auth'] = self.request.user.is_authenticated
-        context['current_user'] = self.request.user.id
+        id = self.kwargs.get('pk')
+        context['is_subscriber'] = self.request.user in Post.objects.get(pk=id).category.all()
+        print(self.request.user.id)
+        print(Post.objects.get(pk=id).category.all())
+        print(self.request.user in Post.objects.get(pk=id).category.all())
         return context
 
 
@@ -90,6 +94,14 @@ def check_subscribe(request, pk):
     for category in categories:
         if user not in category.user.all():
             category.user.add(user)
-        else:
+    return redirect('/news/')
+
+@login_required
+def check_unsubscribe(request, pk):
+    user = User.objects.get(pk=request.user.id)
+    post = Post.objects.get(pk=pk)
+    categories = post.category.all()
+    for category in categories:
+        if user in category.user.all():
             category.user.remove(user)
     return redirect('/news/')
