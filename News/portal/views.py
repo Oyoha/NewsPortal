@@ -7,7 +7,8 @@ from .models import *
 from .filters import PostSearch
 from .forms import PostForm
 from django.shortcuts import redirect
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 
 class NewList(ListView):
@@ -60,6 +61,29 @@ class NewCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = PostForm
     permission_required = ('portal.add_post')
 
+    def post(self, request, *args, **kwargs):
+        new = Post(
+            article=request.POST['article'],
+            text=request.POST['text'],
+            # category=request.POST['category']
+        )
+
+        html_content = render_to_string(
+            'new_send_to_email.html',
+            {'new': new}
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=f'{new.article}',
+            body=f'Здравствуй. Новая статья в твоем любимом разделе!',
+            from_email='vasal3000@mail.ru',
+            to=['vasal30000@mail.ru']
+        )
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
+
+        return redirect('/news/')
+
 
 class NewUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'new_create.html'
@@ -97,6 +121,7 @@ def check_subscribe(request, pk):
         if user not in category.user.all():
             category.user.add(user)
     return redirect('/news/')
+
 
 @login_required
 def check_unsubscribe(request, pk):
