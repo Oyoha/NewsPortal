@@ -33,10 +33,12 @@ class NewDetail(DetailView):
         context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
         context['user_auth'] = self.request.user.is_authenticated
         id = self.kwargs.get('pk')
-        context['is_subscriber'] = self.request.user in Post.objects.get(pk=id).category.all()
-        print(self.request.user.id)
-        print(Post.objects.get(pk=id).category.all())
-        print(self.request.user in Post.objects.get(pk=id).category.all())
+        post = Post.objects.get(pk=id)
+        is_subscriber = True
+        for category in post.category.all():
+            if self.request.user not in category.user.all():
+                is_subscriber = False
+        context['is_subscriber'] = is_subscriber
         return context
 
 

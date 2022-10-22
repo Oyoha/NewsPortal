@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import NewList, NewDetail, NewSearch, NewCreate, NewDelete, NewUpdate, upgrade_me, check_subscribe
+from .views import NewList, NewDetail, NewSearch, NewCreate, NewDelete, NewUpdate, upgrade_me, check_subscribe,\
+    check_unsubscribe
 
 
 urlpatterns = [
@@ -11,5 +12,5 @@ urlpatterns = [
     path('<int:pk>/delete', NewDelete.as_view(), name='new_delete'),
     path('upgrade/', upgrade_me, name='upgrade'),
     path('subscribe/<int:pk>', check_subscribe, name='subscribe'),
-    path('unsubscribe/<int:pk>', check_subscribe, name='unsubscribe')
+    path('unsubscribe/<int:pk>', check_unsubscribe, name='unsubscribe')
 ]
