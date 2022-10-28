@@ -62,11 +62,15 @@ class NewCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = ('portal.add_post')
 
     def post(self, request, *args, **kwargs):
+        print(request.POST['author'])
         new = Post(
             article=request.POST['article'],
             text=request.POST['text'],
-            # category=request.POST['category']
+            author_id=request.POST['author']
         )
+        new.save()
+
+        category = request.POST['category']
 
         html_content = render_to_string(
             'new_send_to_email.html',
