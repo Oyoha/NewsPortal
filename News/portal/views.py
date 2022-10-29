@@ -70,8 +70,14 @@ class NewCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         )
         new.save()
 
-        category = request.POST['category']
-
+        pk = new.pk
+        post = Post.objects.get(pk=pk)
+        user_list = []
+        for category in post.category.all():
+            for user in category.user.all():
+                if user not in user_list:
+                    user_list.append(str(user))
+        print(user_list)
         html_content = render_to_string(
             'new_send_to_email.html',
             {'new': new}
@@ -81,7 +87,7 @@ class NewCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             subject=f'{new.article}',
             body=f'Здравствуй. Новая статья в твоем любимом разделе!',
             from_email='vasal3000@mail.ru',
-            to=['vasal30000@mail.ru']
+            to=[user_list]
         )
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
